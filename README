@@ -1,0 +1,43 @@
+BarnOwl-Module-ClassFilters
+
+Loads filters out of ~/.owl/classfilters.
+
+Filters are or'd by line and and'd within a line.  Lines may be provided in
+a modified form of standard .zephyr.subs class,instance,recipient triplet 
+syntax.  Any missing fields at the end of the triplet are assumed to be 
+wildcards.  Lines beginning with open-parens are passed through raw.
+
+A sample file ~/.owl/classfilters/testfilter:
+
+dirty-owl-hackers
+sipb
+message,white-magic
+kevinr,status,kevinr
+barnowl,*,*
+*,personal,*
+*,*,kevinr
+( filter personal )
+
+results in the following filter 'testfilter':
+
+filter testfilter ( class ^(un)?dirty-owl-hackers$ ) or ( class ^(un)?sipb$ ) \
+    or ( class ^(un)?message$ and instance ^(un)?white-magic$ ) \
+    or ( class ^(un)?kevinr$ and instance ^(un)?status$ and recipient ^kevinr$ ) \
+    or ( class ^(un)?barnowl$ ) or ( instance ^(un)?personal$ ) \
+    or ( recipient ^kevinr$ ) or ( filter personal )
+
+
+INSTALLATION
+
+To install this module, unpack the distribution into ~/.owl/modules/
+
+LICENSE AND COPYRIGHT
+
+Copyright (C) 2010 Kevin Riggle
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
+
+See http://dev.perl.org/licenses/ for more information.
+
