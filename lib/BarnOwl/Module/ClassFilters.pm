@@ -89,6 +89,28 @@ sub load_classfilter
     load_classfilter_from_file($verbose, $filename);
 }
 
+sub get_classfilter
+{
+    my $filtername = shift;
+
+    my @classfilters = list_classfilters();
+    if (!grep(/^$filtername$/, @classfilters)) {
+        BarnOwl::message("Error: No filter named '$filtername'.");
+        return undef;
+    }
+
+    my $filename = filtername_to_filename($filtername);
+    my $contents;
+    { 
+      local $/=undef;
+      open FILE, $filename or die "Couldn't open file: $!";
+      $contents = <FILE>;
+      close FILE;
+    }
+
+    return $contents;
+}
+
 sub load_classfilter_from_file 
 {
     my $verbose = shift;
@@ -140,7 +162,6 @@ sub classfilter_append
     my @filter = @_;
 
     my @classfilters = list_classfilters();
-    BarnOwl::admin_message("foobar", "$filtername in: @classfilters");
     if (!grep(/^$filtername$/, @classfilters)) {
         BarnOwl::message("Error: No filter named '$filtername'.");
         return 0;
@@ -194,13 +215,15 @@ sub cmd_reload_classfilter {
             if (defined $arg2) {
                 load_classfilter(1, $arg2);
             } else {
-                die "Must specify a filter to reload";
+                BarnOwl::message("Error: Must specify a filter to reload");
+                return;
             }
         } else {
             load_classfilter(0, $arg1);
         }
     } else {
-        die "Must specify a filter to reload";
+        BarnOwl::message("Error: Must specify a filter to reload");
+        return;
     }
     BarnOwl::message("Filter loaded.");
 }
@@ -210,6 +233,36 @@ BarnOwl::new_command('reload-classfilter' => \&cmd_reload_classfilter, {
     usage               => 'reload-classfilter [-v] NAME',
     description         => 'Reload a specified filter from ~/.owl/classfilters.'
     . "\n-v (verbose), if provided, displays the filter created."
+    });
+
+sub cmd_list_classfilters {
+    my $cmd = shift;
+    BarnOwl::popless_text("Available classfilters:\n\n" . join("\n", list_classfilters()));
+}
+
+BarnOwl::new_command('list-classfilters' => \&cmd_list_classfilters, {
+    summary             => 'list the available classfilters',
+    usage               => 'list-classfilters',
+    description         => 'List the available classfilters'
+    });
+
+sub cmd_show_classfilter {
+    my $cmd = shift;
+    my $filtername = shift;
+    my $r = undef;
+    if (defined $filtername) {
+        $r = get_classfilter($filtername);
+    } else {
+        BarnOwl::message("Error: Must specify a filter name.");
+        return;
+    }
+    BarnOwl::popless_text("Classfilter '$filtername':\n\n" . $r) if $r;
+}
+
+BarnOwl::new_command('show-classfilter' => \&cmd_show_classfilter, {
+    summary             => 'show a specific classfilter',
+    usage               => 'show-classfilter NAME',
+    description         => 'Show the contents of a specific classfilter'
     });
 
 sub cmd_classfilter_append {
