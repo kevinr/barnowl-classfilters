@@ -155,7 +155,7 @@ sub load_classfilter_from_file
     close $file;
 }
 
-sub classfilter_append
+sub append_classfilter
 {
     my $verbose = shift;
     my $filtername = shift;
@@ -265,7 +265,8 @@ BarnOwl::new_command('show-classfilter' => \&cmd_show_classfilter, {
     description         => 'Show the contents of a specific classfilter'
     });
 
-sub cmd_classfilter_append {
+sub cmd_append_classfilter
+{
     my $cmd = shift;
     my $arg1 = shift;
     my $arg2 = shift;
@@ -273,13 +274,13 @@ sub cmd_classfilter_append {
     if (defined $arg1) {
         if ($arg1 eq '-v') {
             if (defined $arg2) {
-                $r = classfilter_append(1, $arg2, @_);
+                $r = append_classfilter(1, $arg2, @_);
             } else {
                 BarnOwl::message("Error: Must specify a filter to append to");
                 return;
             }
         } else {
-            $r = classfilter_append(0, $arg1, $arg2, @_);
+            $r = append_classfilter(0, $arg1, $arg2, @_);
         }
     } else {
         BarnOwl::message("Error: Must specify a filter to append to");
@@ -288,9 +289,9 @@ sub cmd_classfilter_append {
     BarnOwl::message("Filter loaded.") if $r;
 }
 
-BarnOwl::new_command('classfilter-append' => \&cmd_classfilter_append, {
+BarnOwl::new_command('append-classfilter' => \&cmd_append_classfilter, {
     summary             => 'Append a line to the filter and file in ~/.owl/classfilters',
-    usage               => 'classfilter-append [-v] NAME FILTER',
+    usage               => 'append-classfilter [-v] NAME FILTER',
     description         => 'Append a line to the filter and file in ~/.owl/classfilters'
     . "\n-v (verbose), if provided, displays the filter created."
     });
