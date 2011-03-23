@@ -48,7 +48,7 @@ Put files describing filters in ~/.owl/classfilters.
 
 Filters are automatically loaded on startup or whenever the module is reloaded.
 
-Adds the :reload-classfilters command.
+Adds the :classfilter{,s}-* commands.
 END_DESC
 }
 
@@ -205,6 +205,7 @@ BarnOwl::new_command('reload-classfilters' => \&cmd_reload_classfilters, {
     description         => 'Reload filters from ~/.owl/classfilters.'
     . "\n-v (verbose), if provided, lists the filters as they are created."
     });
+BarnOwl::alias('classfilters-reload', 'reload-classfilters');
 
 sub cmd_reload_classfilter {
     my $cmd = shift;
@@ -234,6 +235,7 @@ BarnOwl::new_command('reload-classfilter' => \&cmd_reload_classfilter, {
     description         => 'Reload a specified filter from ~/.owl/classfilters.'
     . "\n-v (verbose), if provided, displays the filter created."
     });
+BarnOwl::alias('classfilter-reload', 'reload-classfilter');
 
 sub cmd_list_classfilters {
     my $cmd = shift;
@@ -245,6 +247,7 @@ BarnOwl::new_command('list-classfilters' => \&cmd_list_classfilters, {
     usage               => 'list-classfilters',
     description         => 'List the available classfilters'
     });
+BarnOwl::alias('classfilters-list', 'list-classfilters');
 
 sub cmd_show_classfilter {
     my $cmd = shift;
@@ -264,6 +267,7 @@ BarnOwl::new_command('show-classfilter' => \&cmd_show_classfilter, {
     usage               => 'show-classfilter NAME',
     description         => 'Show the contents of a specific classfilter'
     });
+BarnOwl::alias('classfilter-show', 'show-classfilter');
 
 sub cmd_append_classfilter
 {
@@ -295,6 +299,7 @@ BarnOwl::new_command('append-classfilter' => \&cmd_append_classfilter, {
     description         => 'Append a line to the filter and file in ~/.owl/classfilters'
     . "\n-v (verbose), if provided, displays the filter created."
     });
+BarnOwl::alias('classfilter-append', 'append-classfilter');
 
 
 =head1 AUTHOR
