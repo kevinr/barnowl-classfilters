@@ -52,7 +52,7 @@ Adds the :classfilter{,s}-* commands.
 END_DESC
 }
 
-my $filterdir = "$ENV{'HOME'}/.owl/classfilters";
+my $filterdir = BarnOwl::get_config_dir()."/classfilters";
 
 sub list_classfilter_files
 {
